@@ -11,13 +11,13 @@ class NaiveBayes:
     """
     def __init__(self):
         """
-        self.prior --> Class probability of shape (output_label, ). It indicates the probability of a label appearing
+        self.class_probability --> Class probability of shape (output_label, ). It indicates the probability of a label appearing
                        without seeing the input data.
         self.phi --> Probability of a input feature given a output label. P(x|y). shape (output_label, input_feature)
         self.output_label --> Number of output class
         self.input_feature --> Number of input feature
         """
-        self.prior = None
+        self.class_probability = None
         self.phi = None
         self.output_label = None
 
@@ -34,7 +34,7 @@ class NaiveBayes:
         input_features = x_train.shape[1]
         self.output_label = len(np.unique(y_train.reshape(-1)))
         # Initialize everything with zero
-        self.prior = np.zeros(self.output_label)
+        self.class_probability = np.zeros(self.output_label)
         self.phi = np.zeros((self.output_label, input_features))
         # Calculate class probability and phi
         for label in range(self.output_label):
@@ -43,7 +43,7 @@ class NaiveBayes:
             # Number of occurarances of this particular label in the training set
             current_label_occur = current_label_data.shape[0]
             # Class label of this training data
-            self.prior[label] = current_label_occur / m
+            self.class_probability[label] = (current_label_occur + 1) / (m + self.output_label)
             # Calculate phi for an individual label
             # How many times each of the input feature appeared for this label
             # One is added for laplace smoothing
@@ -74,9 +74,9 @@ class NaiveBayes:
                 words_probabilities = self.phi[label][words_for_this_example]
                 # Multiply all these probability
                 words_probability_multiply = np.prod(words_probabilities)
-                # Multiply this with prior probabilities/class probabilities
+                # Multiply this with class_probability probabilities/class probabilities
                 # to get the overall probability of this example
-                probabilities[test_index, label] = words_probability_multiply * self.prior[label]
+                probabilities[test_index, label] = words_probability_multiply * self.class_probability[label]
             # Normalize the probabilities
             probabilities[test_index] /= np.sum(probabilities[test_index])
         # return the maximum probability index
