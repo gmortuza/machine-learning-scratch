@@ -50,7 +50,7 @@ class LinearRegression:
         return np.dot(x, self.w) + self.b
 
     def fit(self, x_train, y_train, x_test, y_test):
-        # Resizing the y input
+        # Resizing the y_train input
         y_train = y_train.reshape(-1, 1)
         y_test = y_test.reshape(-1, 1)
         # initialize parameters with zeros

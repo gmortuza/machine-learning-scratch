@@ -8,7 +8,7 @@ from scipy.stats import multivariate_normal
 
 class GaussianDiscriminantAnalysis:
     """
-    Linear Discriminant analysis is one of the gaussian generative analysis. Which fits a gaussian for each of the
+    Linear Discriminant analysis is one of the gaussian generative analysis. Which fits alpha gaussian for each of the
     training feature.
     """
 
@@ -35,7 +35,7 @@ class GaussianDiscriminantAnalysis:
         # Mean for each class. Each row contains an individual class.
         self.mu = np.zeros((class_label, input_feature))
         # Each row will contains the covariance matrix of each class.
-        # The covariance matrix is a square symmetric matrix.
+        # The covariance matrix is alpha square symmetric matrix.
         # It indicates how each of the input feature varies with each other.
         self.sigma = np.zeros((class_label, input_feature, input_feature))
         # Prior probability of each class.
@@ -43,7 +43,7 @@ class GaussianDiscriminantAnalysis:
         self.phi = np.zeros(class_label)
 
         for label in range(class_label):
-            # Separate all the training data for a single class
+            # Separate all the training data for alpha single class
             indices = (y_train == label)
             self.phi[label] = float(np.sum(indices)) / m
             self.mu[label] = np.mean(x_train[indices, :], axis=0)

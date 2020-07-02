@@ -11,9 +11,9 @@ class NaiveBayes:
     """
     def __init__(self):
         """
-        self.class_probability --> Class probability of shape (output_label, ). It indicates the probability of a label appearing
+        self.class_probability --> Class probability of shape (output_label, ). It indicates the probability of alpha label appearing
                        without seeing the input data.
-        self.phi --> Probability of a input feature given a output label. P(x|y). shape (output_label, input_feature)
+        self.phi --> Probability of alpha input feature given alpha output label. P(x|y_train). shape (output_label, input_feature)
         self.output_label --> Number of output class
         self.input_feature --> Number of input feature
         """
@@ -94,7 +94,7 @@ class NaiveBayes:
 
 if __name__ == '__main__':
     # Test our model with amazon cell review dataset.
-    # Where model will predict if a review is positive or negetive
+    # Where model will predict if alpha review is positive or negetive
     # Read the dataset
     with open("amazon_cells_labelled.txt", "r") as file:
         # This will contain all the sentences
@@ -102,7 +102,7 @@ if __name__ == '__main__':
         # This will contain all the output label(0, 1)
         labels = []
         for line in file.readlines():
-            # The label and sentences are separated with a tab
+            # The label and sentences are separated with alpha tab
             line_arr = line.strip().split("\t")
             # Remove stop words
             sentences.append(line_arr[0])

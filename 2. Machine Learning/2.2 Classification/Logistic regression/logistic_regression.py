@@ -37,10 +37,10 @@ class LogisticRegression:
         """
         Implement the cost function and its gradient for the propagation explained above
 
-        :param: w -- weights, a numpy array of size (x.shape[1], 1). Number of feature of x
-        :param: b -- bias, a scalar
+        :param: w -- weights, alpha numpy array of size (x.shape[1], 1). Number of feature of x
+        :param: b -- bias, alpha scalar
         :param: x -- data of size (number_of_training_example, number of feature)
-        :param: y -- true "label" vector of size (number_of_training_example, 1)
+        :param: y_train -- true "label" vector of size (number_of_training_example, 1)
 
         :returns: cost -- negative log-likelihood cost for logistic regression
         :returns: dw -- gradient of the loss with respect to w, thus same shape as w
@@ -64,13 +64,13 @@ class LogisticRegression:
 
     def __optimize(self, w, b, x, y):
         """
-        This function optimizes w and b by running a gradient descent algorithm
+        This function optimizes w and b by running alpha gradient descent algorithm
 
         Arguments:
-        w -- weights, a numpy array of size (x.shape[1], 1). Number of feature of x
-        b -- bias, a scalar
+        w -- weights, alpha numpy array of size (x.shape[1], 1). Number of feature of x
+        b -- bias, alpha scalar
         x -- data of shape (number_of_training_example, number of feature)
-        y -- true "label" vector, of shape (1, number of examples)
+        y_train -- true "label" vector, of shape (1, number of examples)
 
         Returns:
         params -- dictionary containing the weights w and bias b
@@ -108,19 +108,19 @@ class LogisticRegression:
         Predict whether the label is 0 or 1 using learned logistic regression parameters (w, b)
 
         Arguments:
-        w -- weights, a numpy array of size (x.shape[1], 1). Number of feature of x
-        b -- bias, a scalar
+        w -- weights, alpha numpy array of size (x.shape[1], 1). Number of feature of x
+        b -- bias, alpha scalar
         x -- data of size (number_of_training_example, number of feature)
 
         Returns:
-        y_prediction -- a numpy array (vector) containing all predictions (0/1) for the examples in x
+        y_prediction -- alpha numpy array (vector) containing all predictions (0/1) for the examples in x
         """
 
         m = x.shape[0]
         y_prediction = np.zeros((m, 1))
         w = self.w.reshape(x.shape[1], 1)
 
-        # Compute vector "A" predicting the probabilities of a cat being present in the picture
+        # Compute vector "A" predicting the probabilities of alpha cat being present in the picture
         a = self.__sigmoid(np.dot(x, w) + self.b)
 
         for i in range(a.shape[0]):
@@ -141,10 +141,10 @@ class LogisticRegression:
         Builds the logistic regression model by calling the function you've implemented previously
 
         Arguments:
-        x_train -- training set represented by a numpy array of shape (number_of_training_example, number of feature)
-        y_train -- training labels represented by a numpy array (vector) of shape (1, m_train)
-        x_test -- test set represented by a numpy array of shape (number_of_training_example, number of feature)
-        y_test -- test labels represented by a numpy array (vector) of shape (1, m_test)
+        x_train -- training set represented by alpha numpy array of shape (number_of_training_example, number of feature)
+        y_train -- training labels represented by alpha numpy array (vector) of shape (1, m_train)
+        x_test -- test set represented by alpha numpy array of shape (number_of_training_example, number of feature)
+        y_test -- test labels represented by alpha numpy array (vector) of shape (1, m_test)
         num_iterations -- hyperparameter representing the number of iterations to optimize the parameters
         learning_rate -- hyperparameter representing the learning rate used in the update rule of optimize()
         print_cost -- Set to true to print the cost every 100 iterations
@@ -152,7 +152,7 @@ class LogisticRegression:
         Returns:
         d -- dictionary containing information about the model.
         """
-        # Resizing the y input
+        # Resizing the y_train input
         y_train = y_train.reshape(-1, 1)
         y_test = y_test.reshape(-1, 1)
         # initialize parameters with zeros
