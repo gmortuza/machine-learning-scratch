@@ -67,7 +67,7 @@ class Perceptron:
         """
         return f1_score(y_test, self.predict(x_test))
 
-    def plot_decision_boundary(self, X, y):
+    def show_decision_boundary(self, X, y):
         """
         Show the decision boundary that was predicted by our model
         :param X: Data to plot on the decision boundary
@@ -109,11 +109,10 @@ if __name__ == '__main__':
     print(f"Train F1 score is: {our_perceptron.get_f1_score(X_train, y_train)}")
     print(f"Test F1 score is {our_perceptron.get_f1_score(X_test, y_test)}")
     print(f"===========================================")
-    our_perceptron.plot_decision_boundary(X, Y)
+    our_perceptron.show_decision_boundary(X, Y)
 
     # measure performance with sklearn model
     clf = sklearn_perceptron()
     clf.fit(X_train, y_train)
-    sklearn_f1 = f1_score(y_test, clf.predict(X_test))
     print(f"Train F1 score for sklearn model: {f1_score(y_train, clf.predict(X_train))}")
     print(f"Test F1 score for sklearn model: {f1_score(y_test, clf.predict(X_test))}")
