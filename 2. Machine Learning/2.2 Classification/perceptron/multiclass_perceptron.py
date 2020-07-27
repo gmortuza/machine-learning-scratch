@@ -95,7 +95,6 @@ class multiClassPerceptron:
         plt.ylim(x2min, x2max)
         # Plot the data points
         k = int(max(y)) + 1
-        cols = ['ro', 'k^', 'b*', 'gx']
         for label in range(k):
             plt.plot(x[(y == label), 0], x[(y == label), 1], marker=next(markers), color=next(colors),linestyle='', markersize=8)
         # Construct a grid of points at which to evaluate the classifier
