@@ -57,7 +57,7 @@ class GaussianDiscriminantAnalysis:
         scores = np.zeros((x_tests.shape[0], class_label))
         # We will calculate the probability for each of the class.
         for label in range(class_label):
-            # normal_distribution_prob.logpdf Will give us the log value of the PDF that we just mentioned above.
+            # normal_distribution_prob.logpdf Will give us the log threshold of the PDF that we just mentioned above.
             normal_distribution_prob = multivariate_normal(mean=self.mu[label], cov=self.sigma[label])
             # x_test can have multiple test data we will calculate the probability of each of the test data
             for i, x in enumerate(x_tests):

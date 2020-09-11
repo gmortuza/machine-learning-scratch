@@ -64,13 +64,13 @@ class KernelPerceptron:
         # Set all the prediction to zero first
         y_pred = np.zeros(X_test.shape[0])
         # We don't need all the training exmaple
-        # We will only use the training example that have non zero alpha value
+        # We will only use the training example that have non zero alpha threshold
         # Those are our support vector we will only use those to make prediction
         x_train_used = self.x_train[self.alpha != 0]
         alpha_used = self.alpha[self.alpha != 0]
         y_train_used = self.y_train[self.alpha != 0]
         for i, x in enumerate(X_test):
-            # if all the alpha value is zero(training initialization) then we will use set wx = 0. Cause we don't have
+            # if all the alpha threshold is zero(training initialization) then we will use set wx = 0. Cause we don't have
             # any training data at this point
             if x_train_used.shape[0] > 0:
                 wx = (1 + np.dot(x_train_used, x)**2) * alpha_used * y_train_used

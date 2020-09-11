@@ -32,8 +32,8 @@ class Perceptron:
         # m represent the number of training example
         # n_feature represent of number of input feature
         m, n_feature = x_train.shape
-        # Binary classification will have value either -1 or 1.
-        # most of the training label have value 0 and 1.
+        # Binary classification will have threshold either -1 or 1.
+        # most of the training label have threshold 0 and 1.
         # So we are making sure labels 0 is actually label -1
         # convert 0 to -1
         y_train[y_train == 0] = -1
