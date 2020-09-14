@@ -218,7 +218,7 @@ class DecisionTree:
         # If the loss index is zero then it means that this node is pure/homogenous
         # There is only one class in this node
         # So we can make it as leaf node
-        if optimum_loss == 0:
+        if optimum_loss == 0 or optimum_left.shape[0] == 0 or optimum_right.shape[0] == 0:
             node.make_leaf()
             return
         node.left = Node(optimum_left)
@@ -237,8 +237,9 @@ class DecisionTree:
         if node.is_leaf or node is None:
             return
         # I either of the node doesn't exists then we will make that as leaf node
-        if node.left is None or node.right is None or current_depth > max_depth:
+        if current_depth > max_depth:
             node.make_leaf()
+            return
 
         # process the left child
         # If if the node has less data point than min_leaf_size then we can make it leaf node
@@ -279,13 +280,18 @@ class DecisionTree:
 
 
 if __name__ == '__main__':
+    # Adding seed for reproducibility
     random.seed(1)
-
+    # Load the dataset
     X, y = load_iris(return_X_y=True)
+    # Split the dataset
     X_train, X_test, y_train, y_test = train_test_split(X, y)
+
     clf = tree.DecisionTreeClassifier()
     clf = clf.fit(X_train, y_train)
-    print(f"F1 score of sklearn model is : {f1_score(y_test, clf.predict(X_test), average='micro')}")
+    print(f"Training F1 score of sklearn model is : {f1_score(y_train, clf.predict(X_train), average='micro')}")
+    print(f"Testing F1 score of sklearn model is : {f1_score(y_test, clf.predict(X_test), average='micro')}")
     dt = DecisionTree()
     dt.fit(X_train, y_train)
-    print(f"F1 socre of our model is: {f1_score(dt.predict(X_test), y_test, average='micro')}")
+    print(f"Training F1 score of our model is: {f1_score(dt.predict(X_train), y_train, average='micro')}")
+    print(f"Testing F1 score of our model is: {f1_score(dt.predict(X_test), y_test, average='micro')}")
