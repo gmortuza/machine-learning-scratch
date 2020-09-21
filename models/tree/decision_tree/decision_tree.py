@@ -16,6 +16,7 @@ class Node:
         """
 
         :param regions: training data point of this region
+        :param weights: For the boosting purpose each dataset will have their individual weights
         :param loss: contains the loss of this node. This is the measure of impurity. loss 0 means
                      this node contains only 1 class
         :param index: Index value of the data point that is used as a threshold
@@ -30,6 +31,7 @@ class Node:
         self.left = left
         self.right = right
         self.is_leaf = False
+        # weights of the train dataset
         self.output = None
 
     def make_leaf(self):
@@ -63,8 +65,8 @@ class Node:
         return self.regions.shape[0]
 
     def __str__(self):
-        # TODO: Make a str
-        pass
+        return "Loss: " + self.loss + " splitted on input feature: "\
+               + self.index + " using the threshold: " + self.threshold
 
 
 class DecisionTree:
@@ -94,35 +96,49 @@ class DecisionTree:
         self.n_features = None
         # root node of our tree
         self.root = None
+
         # Loss function
         self.loss_func = loss_function
         # regularization parameter
         self.max_depth = maximum_depth
         self.min_leaf_size = min_leaf_size
 
-    def fit(self, X_train, y_train):
+    def fit(self, X_train, y_train, train_weight=None):
         """
         Train the model
         :param X_train: Training dataset
         :param y_train: Training label
+        :param train_weight: train weight will be used for boosting purposes. Where some of the training data is more important than others
         :return:
         """
         self.num_class = np.unique(y_train).shape[0]
         self.m, self.n_features = X_train.shape
-        # Preprocess the data
+        # Preprocess the data. Though this is not necessary for decision tree.
         X_train = preprocessing.scale(X_train)
+        # Add the weights to the dataset.
+        # This weight is only for the boosting purpose.
+        # This has nothing to do with decision tree
+        # In boosting some of the training dataset will have higher
+        # priority than other training dataset.
+        # If no weight is given then we will set weight 1 to all the training dataset
+        if train_weight is None:
+            train_weight = np.full((self.m,), 1)
+        # Add the weights to the training data for convenience
+        train_weight = np.expand_dims(train_weight, axis=-1)
+        X_train = np.concatenate((X_train, train_weight), axis=1)
         # Expand the dimension of training label to merge it with the test label
         # [1 0 1 0 1 1 1] ==> [[1] [0] [1] [0] [1] [1] [1]]
         y_train = np.expand_dims(y_train, axis=-1)
         # The last column of the region will contain the label for any individual datapoint
         # So that we don't need to pass the labels seperately
         region = np.concatenate((X_train, y_train), axis=1)
+
         # The whole dataset is our root region
         self.root = Node(region)
         # Split root in left and right region
         self.__split(self.root, self.loss_func)
         # Analyze left and right regions. Either split those regions or make those regions as leaf
-        self.__build_tree(self.root, self.loss_func, self.max_depth, self.min_leaf_size, 1)
+        self.__build_tree(self.root, self.loss_func, self.max_depth, self.min_leaf_size, 0)
 
     def predict(self, X_test):
         """
@@ -150,19 +166,26 @@ class DecisionTree:
             # The last row of the regions contains it's label
             # Extract the labels
             label = region[:, -1]
+            # Extract the weights
+            weights = region[:, -2]
+            # Sum of all weights
+            weights_sum = np.sum(weights)
             # If there is no data point then the loss will be 0
             if label.shape[0] == 0:
                 continue
             # Gini index for a single region
             individual_region_loss = 0.0
             # Number of appearance of each class in a region
-            _, counts = np.unique(label, return_counts=True)
-            for count in counts:
+            # _, counts = np.unique(label, return_counts=True)
+            for single_label in np.unique(label):
+                # Get the label from the training set
+                only_this_label = label == single_label
+                # Get the weights for this label only
+                weights_for_this_label = weights[only_this_label]
                 # proportion of that class in that region
-                p = count / label.shape[0]
+                p = np.sum(weights_for_this_label) / weights_sum
                 # See math in the PDF attached
                 if loss_func == 'entropy':
-                    print("entropy")
                     individual_region_loss -= p * np.log(p)
                 else:
                     individual_region_loss += p * (1 - p)
@@ -215,14 +238,21 @@ class DecisionTree:
         node.loss = optimum_loss
         node.index = optimum_index
         node.threshold = optimum_threshold
-        # If the loss index is zero then it means that this node is pure/homogenous
-        # There is only one class in this node
-        # So we can make it as leaf node
-        if optimum_loss == 0 or optimum_left.shape[0] == 0 or optimum_right.shape[0] == 0:
+
+        if optimum_left.shape[0] == 0 or optimum_right.shape[0] == 0:
             node.make_leaf()
             return
         node.left = Node(optimum_left)
         node.right = Node(optimum_right)
+        # If the loss index is zero then it means that this node is pure/homogenous
+        # There is only one class in this node
+        # So we can make it as leaf node
+        if optimum_loss == 0:
+            node.left.make_leaf()
+            node.right.make_leaf()
+            return
+
+
 
     def __build_tree(self, node, loss_func, max_depth, min_leaf_size, current_depth):
         """
@@ -234,7 +264,7 @@ class DecisionTree:
         :return:
         """
         # leaf node need no splitting/processing
-        if node.is_leaf or node is None:
+        if node.is_leaf or node is None or node.left.is_leaf or node.right.is_leaf:
             return
         # I either of the node doesn't exists then we will make that as leaf node
         if current_depth > max_depth:
