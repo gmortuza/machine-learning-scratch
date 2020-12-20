@@ -53,3 +53,5 @@ The math of any particular algorithm is also described.
 
 
 ## Other ML resources
+ - [600 Data Science question](other_ml_resources/600_DS_question.pdf)
+ - [100 ML questions](other_ml_resources/ml_100_question.pdf)
