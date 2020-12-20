@@ -12,8 +12,8 @@ The math of any particular algorithm is also described.
 ## Machine Learning
 
 ### Bayesian
-- Gaussian Discriminant Analysis(GDA)
-- Naive Bayes
+- [Gaussian Discriminant Analysis(GDA)](machine_learning/bayesian/gaussian_discriminative_analysis)
+- [Naive Bayes](machine_learning/bayesian/naive_bayes)
 ### Clustering
 - Hierarchical Clustering
 - K means
@@ -22,15 +22,15 @@ The math of any particular algorithm is also described.
 - Principal Component Analysis
 - T-SNE
 ### Ensemble
-- Bagging
-  - Random Forest
-- Boosting
+- [Bagging](ensemble/bagging)
+  - [Random Forest](ensemble/bagging/random_forest)
+- [Boosting](ensemble/boosting)
 ### Instance based
-- K Nearest Neighbor(KNN)
-- Support Vector Machine(SVM)
+- [K Nearest Neighbor(KNN)](instance_based/knn)
+- [Support Vector Machine(SVM)](instance_based/svm)
 ### Neural Network
 - Artificial Neural Network(ANN)
-  - Perceptron
+  - [Perceptron](neural_network/ann/perceptron)
   - Multi layer perceptron
 - Convolutional Neural Network(CNN)
 - Recurrent Neural Network(RNN)
@@ -38,10 +38,10 @@ The math of any particular algorithm is also described.
 - Generative Adversarial Network(GAN)
 - Transformer
 ### Regression
-- Linear Regression
-- Logistic Regression
+- [Linear Regression](regression/linear_regression)
+- [Logistic Regression](regression/logistic_regression)
 ### Tree
-- Decision Tree
+- [Decision Tree](tree/decision_tree)
 ### Others
 - Feature Selection
 - Optimization
