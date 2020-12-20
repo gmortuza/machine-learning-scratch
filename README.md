@@ -22,15 +22,15 @@ The math of any particular algorithm is also described.
 - Principal Component Analysis
 - T-SNE
 ### Ensemble
-- [Bagging](ensemble/bagging)
-  - [Random Forest](ensemble/bagging/random_forest)
-- [Boosting](ensemble/boosting)
+- [Bagging](machine_learning/ensemble/bagging)
+  - [Random Forest](machine_learning/ensemble/bagging/random_forest)
+- [Boosting](machine_learning/ensemble/boosting)
 ### Instance based
-- [K Nearest Neighbor(KNN)](instance_based/knn)
-- [Support Vector Machine(SVM)](instance_based/svm)
+- [K Nearest Neighbor(KNN)](machine_learning/instance_based/knn)
+- [Support Vector Machine(SVM)](machine_learning/instance_based/svm)
 ### Neural Network
 - Artificial Neural Network(ANN)
-  - [Perceptron](neural_network/ann/perceptron)
+  - [Perceptron](machine_learning/neural_network/ann/perceptron)
   - Multi layer perceptron
 - Convolutional Neural Network(CNN)
 - Recurrent Neural Network(RNN)
@@ -38,10 +38,10 @@ The math of any particular algorithm is also described.
 - Generative Adversarial Network(GAN)
 - Transformer
 ### Regression
-- [Linear Regression](regression/linear_regression)
-- [Logistic Regression](regression/logistic_regression)
+- [Linear Regression](machine_learning/regression/linear_regression)
+- [Logistic Regression](machine_learning/regression/logistic_regression)
 ### Tree
-- [Decision Tree](tree/decision_tree)
+- [Decision Tree](machine_learning/tree/decision_tree)
 ### Others
 - Feature Selection
 - Optimization
