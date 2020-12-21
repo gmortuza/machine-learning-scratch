@@ -16,7 +16,7 @@ The math of any particular algorithm is also described.
 - [Naive Bayes](machine_learning/bayesian/naive_bayes)
 ### Clustering
 - Hierarchical Clustering
-- K means
+- [K means](machine_learning/clustering/k_means)
 ### Dimensionality reduction
 - Linear Discriminant Analysis(LDA)
 - Principal Component Analysis
