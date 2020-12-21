@@ -25,6 +25,7 @@ The math of any particular algorithm is also described.
 - [Bagging](machine_learning/ensemble/bagging)
   - [Random Forest](machine_learning/ensemble/bagging/random_forest)
 - [Boosting](machine_learning/ensemble/boosting)
+  - [AdaBoost](machine_learning/ensemble/boosting/adaboost)
 ### Instance based
 - [K Nearest Neighbor(KNN)](machine_learning/instance_based/knn)
 - [Support Vector Machine(SVM)](machine_learning/instance_based/svm)
@@ -45,9 +46,12 @@ The math of any particular algorithm is also described.
 ### Others
 - Feature Selection
 - Optimization
-- Performance Measurement
+- [Performance Measurement](machine_learning/others/performance_measurement)
+  - [Precision, Recall, ROC, AUC, Confusion Matrix](machine_learning/others/performance_measurement/Confusion%20matrix%20AUC%20ROC%20Precission%20recall.pdf)
 - Regularization
 - Terminology
 
 
 ## Other ML resources
+ - [600 Data Science question](other_ml_resources/600_DS_question.pdf)
+ - [100 ML questions](other_ml_resources/ml_100_question.pdf)
