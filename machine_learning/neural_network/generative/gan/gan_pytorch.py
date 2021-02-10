@@ -86,10 +86,8 @@ def get_disc_loss(generator, discriminator, real, num_images):
     Calculate discriminator loss
     :param generator:
     :param discriminator:
-    :param criterion:
     :param real:
     :param num_images:
-    :param noise_dim:
     :return:
     """
     # Generating the noise vector
