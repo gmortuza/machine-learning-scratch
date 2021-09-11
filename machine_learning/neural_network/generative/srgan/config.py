@@ -5,14 +5,14 @@ from albumentations.pytorch import ToTensorV2
 # All config
 # DEVICE = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 DEVICE = 'cpu'
-BATCH_SIZE = 64
+BATCH_SIZE = 16
 LEARNING_RATE = 1e-4
 SCALE = 4.
 LOAD_MODEL = True
 SAVE_MODEL = True
 EPOCHS = 100
-HEIGHT = 321
-WIDTH = 500
+HEIGHT = 24
+WIDTH = 24
 
 normalize_transform = A.Compose(
     [
