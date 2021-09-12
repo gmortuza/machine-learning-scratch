@@ -45,6 +45,31 @@ def train(gen, disc: nn.Module, disc_optim: torch.optim, gen_optim: torch.optim,
             progress_bar.set_postfix(loss=bar_text)
             progress_bar.update()
 
+    return sum(gen_loss_history) / len(gen_loss_history), sum(disc_loss_history) / len(disc_loss_history)
+
+
+def evaluation(gen, disc, gen_loss_fn, disc_loss_fn, eval_data_loader):
+    gen.eval()
+    disc.eval()
+    gen_loss_history = []
+    disc_loss_history = []
+    for low_res, high_res in eval_data_loader:
+        low_res = low_res.to(DEVICE)
+        high_res = high_res.to(DEVICE)
+        fake_img = gen(low_res)
+
+        disc_real = disc(high_res)
+        disc_fake = disc(fake_img.detach())
+        disc_loss = disc_loss_fn(disc_fake, disc_real)
+
+        disc_fake = disc(fake_img)
+        gen_loss = gen_loss_fn(disc_fake, fake_img, high_res)
+
+        gen_loss_history.append(gen_loss.item())
+        disc_loss_history.append(disc_loss.item())
+    return sum(gen_loss_history) / len(gen_loss_history), sum(disc_loss_history) / len(disc_loss_history)
+
+
 
 def train_evaluation():
     gen = Generator().to(DEVICE)
@@ -55,7 +80,12 @@ def train_evaluation():
     disc_loss_fn = fetch_disc_loss()
     # Data loader
     train_data_loader, val_data_loader = fetch_data_loader('dataset/')
-    train(gen, disc, disc_optim, gen_optim, gen_loss_fn, disc_loss_fn, train_data_loader)
+    for epoch in range(EPOCHS):
+        print(f"Epoch {epoch + 1}/{EPOCHS}")
+        train_loss = train(gen, disc, disc_optim, gen_optim, gen_loss_fn, disc_loss_fn, train_data_loader)
+        print(f"Train loss: \n \t Generator: {train_loss[0]} \n \t Discriminator: {train_loss[1]}")
+        eval_loss = evaluation(gen, disc, gen_loss_fn, disc_loss_fn, val_data_loader)
+        print(f"Eval loss: \n \t Generator: {eval_loss[0]} \n \t Discriminator: {eval_loss[1]}")
 
 
 if __name__ == '__main__':
