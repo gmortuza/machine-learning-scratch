@@ -25,6 +25,10 @@ class Generator(nn.Module):
             nn.Conv2d(3, 64, 9, 1, 4, bias=False),
             nn.PReLU()
         )
+        res_block = []
+        for _ in range(16):
+            res_block.append(ResBlock(64))
+        self.res_block = nn.Sequential(*res_block)
 
         self.conv_block_2 = nn.Sequential(
             nn.Conv2d(64, 64, (1, 1), (1, 1), bias=False),
@@ -47,8 +51,7 @@ class Generator(nn.Module):
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         out = self.conv_block_1(x)
-        for _ in range(16):
-            out = ResBlock(64)(out)
+        out = self.res_block(out)
         out = out + self.conv_block_2(out)
         out = self.up_scaler(out)
         out = self.final_conv(out)
@@ -57,7 +60,7 @@ class Generator(nn.Module):
 
 def test():
     gen = Generator()
-    x = torch.randn((32, 3, HEIGHT, WIDTH))
+    x = torch.randn((32, 3, HIGH_RES, HIGH_RES))
     out = gen(x)
     print(out.shape)
 

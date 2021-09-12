@@ -1,34 +1,30 @@
 import torch
 import albumentations as A
 from albumentations.pytorch import ToTensorV2
+from PIL import Image
 
 # All config
-# DEVICE = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
-DEVICE = 'cpu'
-BATCH_SIZE = 16
+DEVICE = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
+# DEVICE = 'cpu'
+BATCH_SIZE = 64
 LEARNING_RATE = 1e-4
 SCALE = 4.
 LOAD_MODEL = True
 SAVE_MODEL = True
 EPOCHS = 100
-HEIGHT = 24
-WIDTH = 24
+HIGH_RES = 96
+LOW_RES = int(HIGH_RES // SCALE)
 
 normalize_transform = A.Compose(
     [
-        A.Normalize(mean=[.5, .5, .5], std=[.5, .5, .5]),
-        A.Resize(HEIGHT, WIDTH, always_apply=True, p=1),
-        ToTensorV2()
+        A.Normalize(mean=[0., 0., 0.], std=[.5, .5, .5]),
+        A.CenterCrop(HIGH_RES, HIGH_RES, always_apply=True, p=1),
     ]
 )
-# degrade resolution
-degrade_res_transform = A.Compose(
+
+low_res_transform = A.Compose(
     [
-        A.Normalize(mean=[.5, .5, .5], std=[.5, .5, .5]),
-        # lower the resolution
-        A.Resize(int(HEIGHT // SCALE), int(WIDTH // SCALE), always_apply=True, p=1),
-        # higher the resolution
-        A.Resize(HEIGHT, WIDTH, always_apply=True, p=1),
+        A.Resize(LOW_RES, LOW_RES, interpolation=Image.BICUBIC),
         ToTensorV2()
     ]
 )

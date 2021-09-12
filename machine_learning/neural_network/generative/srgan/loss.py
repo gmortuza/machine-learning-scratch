@@ -6,6 +6,20 @@ from config import *
 bce_loss = nn.BCEWithLogitsLoss()
 mse_loss = nn.MSELoss()
 
+
+class VGGLoss(nn.Module):
+    def __init__(self):
+        super(VGGLoss, self).__init__()
+        self.vgg19 = models.vgg19(pretrained=True, num_classes=1000).eval()
+        for params in self.vgg19.parameters():
+            params.requires_grad = False
+
+    def forward(self, fake: torch.Tensor, high_res: torch.Tensor) -> torch.Tensor:
+        vgg_fake = self.vgg19(fake)
+        vgg_high_res = self.vgg19(high_res)
+        return mse_loss(vgg_fake, vgg_high_res)
+
+
 def get_vgg_loss(fake, high_res):
     vgg19 = models.vgg19(pretrained=True, num_classes=1000).eval()
 
@@ -29,8 +43,8 @@ def fetch_disc_loss():
 
 def fetch_gen_loss():
     def gen_loss(disc_fake, gen_fake, high_res):
-        adversarial_loss = 1e-3 * bce_loss(disc_fake, torch.ones_like(bce_loss))
-        vgg_loss = .006 * get_vgg_loss(gen_fake, high_res)
+        adversarial_loss = 1e-3 * bce_loss(disc_fake, torch.ones_like(disc_fake))
+        vgg_loss = .006 * VGGLoss().to(gen_fake.device)(gen_fake, high_res)
         return adversarial_loss + vgg_loss
 
 

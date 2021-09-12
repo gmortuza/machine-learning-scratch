@@ -20,9 +20,9 @@ class Dataset(Dataset):
         return len(self.file_names)
 
     def __getitem__(self, idx):
-        image = np.array(Image.open(self.file_names[idx]))
-        low_res_image = degrade_res_transform(image=image)['image']
-        return low_res_image, normalize_transform(image=image)['image']
+        image = normalize_transform(image=np.array(Image.open(self.file_names[idx])))['image']
+        low_res_image = low_res_transform(image=image)['image']
+        return low_res_image, torch.tensor(image).permute(2, 0, 1)
 
 
 def fetch_data_loader(directory):

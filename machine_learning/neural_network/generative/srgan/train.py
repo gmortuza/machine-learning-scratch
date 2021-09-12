@@ -10,10 +10,9 @@ from torch import optim
 from dataset import fetch_data_loader
 
 
-def train(gen: nn.Module, disc: nn.Module, disc_optim: torch.optim, gen_optim: torch.optim, gen_loss_fn, disc_loss_fn, train_data_loader: torch.utils.data.DataLoader):
-    gen.train()
-    disc.train()
-    loss_history = []
+def train(gen, disc: nn.Module, disc_optim: torch.optim, gen_optim: torch.optim, gen_loss_fn, disc_loss_fn, train_data_loader: torch.utils.data.DataLoader):
+    gen_loss_history = []
+    disc_loss_history = []
     accuracy_history = []
 
     with tqdm(total=len(train_data_loader)) as progress_bar:
@@ -38,12 +37,18 @@ def train(gen: nn.Module, disc: nn.Module, disc_optim: torch.optim, gen_optim: t
             gen_optim.zero_grad()
             gen_loss.backward()
             gen_optim.step()
-        progress_bar.update(1)
+
+            gen_loss_history.append(gen_loss.item())
+            disc_loss_history.append(disc_loss.item())
+
+            bar_text = f'gen : {round(sum(gen_loss_history) / len(gen_loss_history), 3)}, disc : {round(sum(disc_loss_history) / len(disc_loss_history), 3)}'
+            progress_bar.set_postfix(loss=bar_text)
+            progress_bar.update()
 
 
 def train_evaluation():
-    gen = Generator()
-    disc = Discriminator()
+    gen = Generator().to(DEVICE)
+    disc = Discriminator().to(DEVICE)
     gen_optim = optim.Adam(gen.parameters(), lr=LEARNING_RATE)
     disc_optim = optim.Adam(disc.parameters(), lr=LEARNING_RATE)
     gen_loss_fn = fetch_gen_loss()
