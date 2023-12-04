@@ -10,7 +10,7 @@ tokenizer_model = "ted_hrlr_translate_pt_en_converter"
 tf.keras.utils.get_file(
     f"{tokenizer_model}.zip",
     f"https://storage.googleapis.com/download.tensorflow.org/models/{tokenizer_model}.zip",
-    cache_dir='.', cache_subdir='', extract=True
+    cache_dir='..', cache_subdir='', extract=True
 )
 tokenizer = tf.saved_model.load(tokenizer_model)
 
