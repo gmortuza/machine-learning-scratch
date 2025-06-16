@@ -1,0 +1,14 @@
+dataset_dir:  "data/"
+train_data: "bn_en_translation_train.txt"
+valid_data: "bn_en_translation_valid.txt"
+batch_size: 32
+num_epochs: 10
+learning_rate: 0.0001
+max_seq_length: 128
+# define tokenizer
+src_tokenizer: "sagorsarker/bangla-bert-base"
+tgt_tokenizer: "bert-base-uncased"
+output_dir: "outputs"
+log_to: "terminal" # file, terminal
+log_level: "info" # info, "debug", "warning"
+demo: "demo config"
