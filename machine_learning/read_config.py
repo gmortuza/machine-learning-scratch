@@ -16,6 +16,7 @@ class Config:
 
     def __init__(self, config_file_path):
         self.update(config_file_path)
+        self.base_dir = os.path.dirname(os.path.abspath(config_file_path))
         self._additional_parameter()
 
         # Initially it will be false
@@ -34,12 +35,15 @@ class Config:
         self.logger.info("Finish reading the configuration file")
 
     def _additional_parameter(self):
-        self.base_dir = os.path.dirname(os.path.abspath(__file__))
+        pass
 
     def _make_absolute_directory(self):
         # prepend this base directory with other parameter so that we won't get any error for the path
         # As those directory will be accessed from different file. which are in different location
         self.dataset_dir = os.path.join(self.base_dir, self.dataset_dir)
+        self.train_data = os.path.join(self.dataset_dir, self.train_data)
+        self.valid_data = os.path.join(self.dataset_dir, self.valid_data)
+
         self.output_dir = os.path.join(self.base_dir, self.output_dir)
 
         self.checkpoint_dir = os.path.join(self.output_dir, "checkpoint")
